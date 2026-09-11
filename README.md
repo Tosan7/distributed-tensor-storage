@@ -223,4 +223,4 @@ python ci/run_local_ci.py
 ---
 
 ## 📜 License
-MIT License. Free to use, modify, and distribute for educational and commercial purposes.
+Apache 2.0 License. Free to use, modify, and distribute for educational and commercial purposes.

@@ -1,0 +1,10 @@
+{
+  "benchmark_timestamp": "2026-09-11T12:40:39Z",
+  "concurrent_workers": 20,
+  "total_requests": 100,
+  "throughput_mb_s": 299.06,
+  "cache_hit_rate_pct": 100.0,
+  "latency_p50_ms": 244.09,
+  "latency_p95_ms": 297.44,
+  "latency_p99_ms": 306.22
+}

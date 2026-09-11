@@ -1,0 +1,7 @@
+.env
+
+node_modules/
+
+storage_data/
+*Resume*
+generate_resume_docx.py

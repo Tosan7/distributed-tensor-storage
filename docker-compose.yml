@@ -1,0 +1,30 @@
+
+services:
+  # 1. Relational Metadata Database
+  postgres:
+    image: postgres:17-alpine
+    container_name: tensor_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: storage_admin
+      POSTGRES_PASSWORD: storage_password123
+      POSTGRES_DB: tensor_storage
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # 2. Hot Chunk Cache
+  redis:
+    image: redis:7-alpine
+    container_name: tensor_redis
+    restart: always
+    command: redis-server --maxmemory 512mb --maxmemory-policy allkeys-lru
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+volumes:
+  postgres_data:
+  redis_data:

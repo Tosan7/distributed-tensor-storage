@@ -1,0 +1,68 @@
+pipeline {
+    agent any
+
+    environment {
+        GATEWAY_URL = 'http://127.0.0.1:3000'
+        DB_PORT     = '5433'
+        REDIS_PORT  = '6379'
+    }
+
+    stages {
+        // Stage 1: Environment & Dependency Check
+        stage('1. Environment Sanity Check') {
+            steps {
+                echo '=== Checking Node.js, Python, and Docker Runtime Environments ==='
+                sh 'node -v'
+                sh 'python --version'
+                sh 'docker ps'
+            }
+        }
+
+        // Stage 2: Database Schema & Migration Validation
+        stage('2. Database Schema Validation') {
+            steps {
+                echo '=== Verifying PostgreSQL Schema and Tables ==='
+                sh 'docker exec -i tensor_postgres psql -U storage_admin -d tensor_storage -c "\\dt"'
+            }
+        }
+
+        // Stage 3: Deep Learning Tensor Bit-for-Bit Verification
+        stage('3. Tensor Integrity Verification') {
+            steps {
+                echo '=== Executing Mathematical Bit-for-Bit Validation (NumPy) ==='
+                sh 'python client/verify_tensor.py'
+            }
+        }
+
+        // Stage 4: 20-Worker Concurrency Benchmark
+        stage('4. Storage Performance Benchmark') {
+            steps {
+                echo '=== Running Multi-Worker Concurrency Load Test ==='
+                sh 'python client/benchmark.py'
+            }
+        }
+
+        // Stage 5: Infrastructure & Bit-Rot Diagnostics
+        stage('5. Storage Diagnostics & Bit-Rot Scan') {
+            steps {
+                echo '=== Running Storage Diagnostic & Hardware Health Scanner ==='
+                sh 'python scripts/diagnose_storage.py'
+            }
+        }
+    }
+
+    // Post-Build Actions: Archive Performance Artifacts
+    post {
+        always {
+            echo '=== Pipeline Execution Completed ==='
+            // Archives the benchmark JSON report so engineers can track throughput over time!
+            archiveArtifacts artifacts: 'benchmark_report.json', allowEmptyArchive: true
+        }
+        success {
+            echo '🎉 BUILD SUCCESS: Storage platform passed all integrity and SLA latency checks!'
+        }
+        failure {
+            echo '🚨 BUILD FAILURE: Storage degradation or corrupted chunks detected!'
+        }
+    }
+}
